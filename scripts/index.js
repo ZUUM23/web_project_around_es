@@ -27,3 +27,19 @@ initialCards = [
 initialCards.forEach(function (card) {
   console.log(card.name);
 });
+
+const openCardButtonEdit = document.querySelector(".profile__edit-button");
+const divCard = document.querySelector(".popup");
+const openCardButton = document.querySelector("#edit-popup");
+const closeCardButton = openCardButton.querySelector(".popup__close-button");
+
+const openModal = (modal) => {
+  divCard.classList.add(`popup_is-opened`);
+};
+
+const closeModal = (modal) => {
+  divCard.classList.remove(`popup_is-opened`);
+};
+
+openCardButtonEdit.addEventListener("click", openModal(openCardButton));
+closeCardButton.addEventListener("click", closeModal(openCardButton));
