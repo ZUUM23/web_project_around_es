@@ -34,27 +34,31 @@ const imagemodal = document.querySelector("#image-modal");
 const profileForm = document.querySelector(".popup__form");
 const closeCardButton = openCardButton.querySelector(".popup__close-button");
 const closeModalButton = document.querySelector(".popup__close");
+
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const initialName = document.querySelector(".popup__input_type_name");
 const descriction = document.querySelector(".popup__input_type_description");
+const newtarge = document.querySelector("#new-card-popup");
+const closeCardFormbutton = newtarge.querySelector(".popup__close");
+const profile = document.querySelector(".profile");
+const openCardFormButton = profile.querySelector(".profile__add-button");
 
-const openProfile = document.querySelector(".profile__add-button");
 const container = document.querySelector(".cards__list");
+const addCardsForm = newtarge.querySelector(".popup__form");
 // declarar
 const openModal = (modal) => {
   fillProfileForm();
-  // divCard.classList.add(`popup_is-opened`);
   modal.classList.add("popup_is-opened");
 };
 
 const closeModal = (modal) => {
   modal.classList.remove(`popup_is-opened`);
 };
-function handleCardFormSubmit() {
-  fillProfileForm();
-  openModal(openCardButton);
-}
+
+openCardFormButton.addEventListener("click", (evt) => {
+  openModal(newtarge);
+});
 
 function fillProfileForm() {
   const currentName = profileTitle.textContent;
@@ -77,16 +81,35 @@ const handleProfileFormSubmit = (evt) => {
   profileDescription.textContent = newdescription;
   closeModal(openCardButton);
 };
-openProfile.addEventListener("click", handleCardFormSubmit);
+
+const handleCardFormSubmit = (evt) => {
+  evt.preventDefault();
+  const nameForm = document.querySelector(".popup__input_type_card-name");
+  const linkForm = document.querySelector(".popup__input_type_url");
+
+  renderCard(
+    {
+      name: nameForm.value,
+      link: linkForm.value,
+    },
+    container,
+  );
+
+  closeModal(newtarge);
+  addCardsForm.reset();
+};
+
 openCardButtonEdit.addEventListener("click", handleOpenEditModal);
 closeCardButton.addEventListener("click", () => closeModal(divCard));
+closeCardFormbutton.addEventListener("click", () => closeModal(newtarge));
+addCardsForm.addEventListener("submit", handleCardFormSubmit);
 closeModalButton.addEventListener("click", () => closeModal(imagemodal));
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 
 const handleLike = (evt) => {
   evt.target.classList.toggle("card__like-button_is-active");
 };
-// const handlePreviewPicture = (data) => {
+
 //   imageElement.src = data.link;
 //   imageElement.alt = data.name;
 //   imageCaption.textContent = data.name;
@@ -94,23 +117,20 @@ const handleLike = (evt) => {
 //   const imageElement = openCardButton.querySelector(".popup__image");
 // };
 
-const getCardElement = (
-  name = `sin titulo`,
-  link = `./images/placeholder.jpg`,
-) => {
+const getCardElement = (data) => {
   const cardElement = template.cloneNode(true);
 
   const cardImage = cardElement.querySelector(".card__image");
-  cardImage.src = link;
-  cardImage.alt = name;
+  cardImage.src = data.link;
+  cardImage.alt = data.name;
   const like = cardElement.querySelector(".card__like-button");
   const deleteButton = cardElement.querySelector(".card__delete-button");
   const cardTitle = cardElement.querySelector(".card__title");
-  cardTitle.textContent = name;
+  cardTitle.textContent = data.name;
+  console.log(cardTitle);
 
   cardImage.addEventListener("click", (evt) => {
     const data = evt.target;
-    console.log(data);
 
     const modalImage = document.querySelector(".popup__image");
     const modalCaption = document.querySelector(".popup__caption");
@@ -128,13 +148,11 @@ const getCardElement = (
   return cardElement;
 };
 
-const renderCard = (name, link, container) => {
-  const cardElement = getCardElement(name, link);
+const renderCard = (data, container) => {
+  const cardElement = getCardElement(data);
   container.prepend(cardElement);
 };
 
 initialCards.forEach((card) => {
-  console.log(card);
-
-  renderCard(card.name, card.link, container);
+  renderCard(card, container);
 });
