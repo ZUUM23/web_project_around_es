@@ -1,10 +1,10 @@
-class FormValidator {
-  constructor(config, formElement) {
-    this._inputSelector = config.input;
+export default class FormValidator {
+  constructor(data, formElement) {
+    this._inputSelector = data.input;
     this._submitButtonSelector = ".popup__button";
-    this._inactiveButtonClass = config.inactiveButtonClass;
-    this._inputErrorClass = config.inputErrorClass;
-    this._errorClass = config.errorClass;
+    this._inactiveButtonClass = data.inactiveButtonClass;
+    this._inputErrorClass = data.inputErrorClass;
+    this._errorClass = data.errorClass;
 
     this._formElement = formElement;
   }

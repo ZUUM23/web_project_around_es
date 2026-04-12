@@ -1,4 +1,7 @@
-initialCards = [
+import Card from "./Cards.js";
+import FormValidator from "./FormValidator.js";
+
+const initialCards = [
   {
     name: "Valle de Yosemite",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
@@ -28,6 +31,7 @@ initialCards = [
     link: "https://images.unsplash.com/photo-1694537820343-d7c364b18593?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bGFnbyUyMGFsYXNrYXxlbnwwfHwwfHx8MA%3D%3D",
   },
 ];
+
 const template = document
   .querySelector("#template")
   .content.querySelector(".card");
@@ -60,13 +64,24 @@ const validButton = forElement.querySelector(".popup__button");
 const validProfile = document.querySelector(".popup__button");
 const halfpage = document.querySelectorAll(".popup");
 const modalImage = document.querySelector(".popup__image");
-const configData = {
+const data = {
   input: ".popupinput",
   inactiveButtonClass: "popupbutton_disabled",
   inputErrorClass: "popupinput_type_error",
   errorClass: "popuperror_visible",
 };
 
+// const data = {
+//   input: ".popupinput",
+//   inactiveButtonClass: "popupbutton_disabled",
+//   inputErrorClass: "popupinput_type_error",
+//   errorClass: "popuperror_visible",
+//   imageModal: "#image-popup",
+//   cardimg: ".popup__image",
+//   cerrar: ".popup__close",
+//   cardLike: ".card__like-button",
+//   borrar: ".card__delete-button",
+// };
 // declarar
 const openModal = (modal) => {
   fillProfileForm();
@@ -160,8 +175,8 @@ initialCards.forEach((card) => {
   renderCard(card, container);
 });
 
-const profileFormValidator = new FormValidator(configData, profileForm);
-const cardFormValidator = new FormValidator(configData, addCardsForm);
+const profileFormValidator = new FormValidator(data, profileForm);
+const cardFormValidator = new FormValidator(data, addCardsForm);
 
 profileFormValidator.enableValidation();
 cardFormValidator.enableValidation();

@@ -4,7 +4,7 @@ const deleteWindow = cardElement.querySelector(".popup__close");
 const cardLike = document.querySelector(".card__like-button");
 const deleteCard = document.querySelector(".card__delete-button");
 
-class Card {
+export default class Card {
   constructor(data, templateSelector) {
     this._name = data.name;
     this._link = data.link;
