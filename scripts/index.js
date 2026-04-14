@@ -65,23 +65,12 @@ const validProfile = document.querySelector(".popup__button");
 const halfpage = document.querySelectorAll(".popup");
 const modalImage = document.querySelector(".popup__image");
 const data = {
-  input: ".popupinput",
+  input: ".popup__input",
   inactiveButtonClass: "popupbutton_disabled",
   inputErrorClass: "popupinput_type_error",
   errorClass: "popuperror_visible",
 };
 
-// const data = {
-//   input: ".popupinput",
-//   inactiveButtonClass: "popupbutton_disabled",
-//   inputErrorClass: "popupinput_type_error",
-//   errorClass: "popuperror_visible",
-//   imageModal: "#image-popup",
-//   cardimg: ".popup__image",
-//   cerrar: ".popup__close",
-//   cardLike: ".card__like-button",
-//   borrar: ".card__delete-button",
-// };
 // declarar
 const openModal = (modal) => {
   fillProfileForm();
