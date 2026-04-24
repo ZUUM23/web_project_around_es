@@ -1,5 +1,36 @@
 import Card from "./Cards.js";
+import Popup from "./popup.js";
+import Section from "./Section.js";
 import FormValidator from "./FormValidator.js";
+import UserInfo from "./UserInfo.js";
+import PopupWithForm from "./PopupWithForm.js";
+import PopupWithImage from "./PopupWithImage.js";
+
+export const profileForm = document.querySelector(".popup__form");
+import {
+  container,
+  closeCardFormbutton,
+  openCardButton,
+  popupCaption,
+  form,
+  newtarge,
+  imageClose,
+  cardElement,
+  divCard,
+  imagemodal,
+  modalImage,
+  validProfile,
+  profileTitle,
+  profileDescription,
+  initialName,
+  descriction,
+  closeModalButton,
+  closeCardButton,
+  openCardButtonEdit,
+  addCardsForm,
+  openCardFormButton,
+  profile,
+} from "./utils.js";
 
 const initialCards = [
   {
@@ -35,35 +66,7 @@ const initialCards = [
 const template = document
   .querySelector("#template")
   .content.querySelector(".card");
-const openCardButtonEdit = document.querySelector(".profile__edit-button");
-const divCard = document.querySelector(".popup");
-const openCardButton = document.querySelector("#edit-popup");
-const imagemodal = document.querySelector("#image-modal");
-const profileForm = document.querySelector(".popup__form");
-const closeCardButton = openCardButton.querySelector(".popup__close-button");
-const closeModalButton = document.querySelector(".popup__close");
 
-const profileTitle = document.querySelector(".profile__title");
-const profileDescription = document.querySelector(".profile__description");
-const initialName = document.querySelector(".popup__input_type_name");
-const descriction = document.querySelector(".popup__input_type_description");
-const newtarge = document.querySelector("#new-card-popup");
-const closeCardFormbutton = newtarge.querySelector(".popup__close");
-const profile = document.querySelector(".profile");
-const openCardFormButton = profile.querySelector(".profile__add-button");
-
-const container = document.querySelector(".cards__list");
-const cardImage = document.querySelector(".card__image");
-
-const addCardsForm = newtarge.querySelector(".popup__form");
-const form = document.querySelector(".popup__form");
-// const inputs = form.querySelectorAll(".popup__input");
-const forElement = document.querySelector("#new-card-form");
-// const inputs2 = forElement.querySelectorAll(".popup__input");
-const validButton = forElement.querySelector(".popup__button");
-const validProfile = document.querySelector(".popup__button");
-const halfpage = document.querySelectorAll(".popup");
-const modalImage = document.querySelector(".popup__image");
 const data = {
   input: ".popup__input",
   inactiveButtonClass: "popupbutton_disabled",
@@ -71,99 +74,47 @@ const data = {
   errorClass: "popuperror_visible",
 };
 
-// declarar
-const openModal = (modal) => {
-  fillProfileForm();
-  modal.classList.add("popup_is-opened");
-};
-
-const closeModal = (modal) => {
-  modal.classList.remove(`popup_is-opened`);
-};
-
-openCardFormButton.addEventListener("click", (evt) => {
-  openModal(newtarge);
+openCardButtonEdit.addEventListener("click", () => {
+  popupEj.openModal(openCardButton);
+});
+closeCardButton.addEventListener("click", () => {
+  popupEj.closemodal(openCardButton);
+});
+openCardFormButton.addEventListener("click", () => {
+  popupEjemplo.openModal(newtarge);
+});
+closeCardFormbutton.addEventListener("click", () => {
+  popupEjemplo.closemodal(newtarge);
+});
+imageClose.addEventListener("click", () => {
+  image.closemodal(imagemodal);
 });
 
-function fillProfileForm() {
-  const currentName = profileTitle.textContent;
-  const currentDescription = profileDescription.textContent;
-
-  initialName.value = currentName;
-  descriction.value = currentDescription;
-  if (form.checkValidity()) {
-    validProfile.disabled = false;
-  } else {
-    validProfile.disabled = true;
-  }
-}
-function handleOpenEditModal() {
-  fillProfileForm();
-  openModal(openCardButton);
-}
-
-const handleProfileFormSubmit = (evt) => {
-  evt.preventDefault();
-  const newName = initialName.value;
-  const newdescription = descriction.value;
-
-  profileTitle.textContent = newName;
-  profileDescription.textContent = newdescription;
-  closeModal(openCardButton);
+const handleCardClick = (name, link) => {
+  image.openModal(name, link);
 };
-
-const handleCardFormSubmit = (evt) => {
-  evt.preventDefault();
-  const nameForm = document.querySelector(".popup__input_type_card-name");
-  const linkForm = document.querySelector(".popup__input_type_url");
-
-  renderCard(
-    {
-      name: nameForm.value,
-      link: linkForm.value,
-    },
-    container,
-  );
-
-  closeModal(newtarge);
-  addCardsForm.reset();
-};
-
-openCardButtonEdit.addEventListener("click", handleOpenEditModal);
-closeCardButton.addEventListener("click", () => closeModal(divCard));
-closeCardFormbutton.addEventListener("click", () => closeModal(newtarge));
-addCardsForm.addEventListener("submit", handleCardFormSubmit);
-closeModalButton.addEventListener("click", () => closeModal(imagemodal));
-profileForm.addEventListener("submit", handleProfileFormSubmit);
-
-window.addEventListener("click", (evt) => {
-  if (evt.target.classList.contains("popup")) {
-    closeModal(imagemodal);
-    closeModal(newtarge);
-    closeModal(openCardButton);
-  }
-});
-
-window.addEventListener("keydown", (evt) => {
-  if (evt.key === "Escape") {
-    closeModal(imagemodal);
-    closeModal(newtarge);
-    closeModal(openCardButton);
-    enableValidation(configData);
-  }
-});
-
 const renderCard = (data, container) => {
-  const card = new Card(data, ".template");
+  const card = new Card(data, ".template", handleCardClick);
   const cardNew = card._cardgeneration();
-  document.querySelector(".cards__list").append(cardNew);
+  document.querySelector(".cards__list").prepend(cardNew);
   console.log(cardNew);
 };
 
+const nuevSection = new Section(
+  { items: initialCards, renderer: renderCard },
+  ".cards__list",
+);
+const popupEj = new Popup("#edit-popup");
+const popupEjemplo = new Popup("#new-card-popup");
+
+const image = new PopupWithImage("#image-modal", modalImage, popupCaption);
 initialCards.forEach((card) => {
   renderCard(card, container);
 });
-
+const userInfo2 = new UserInfo({
+  nameSelector: `profile__title`,
+  workSelector: `profile__description`,
+});
 const profileFormValidator = new FormValidator(data, profileForm);
 const cardFormValidator = new FormValidator(data, addCardsForm);
 

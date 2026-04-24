@@ -1,14 +1,17 @@
-const cardElement = document.querySelector("#image-popup");
-const cardsImage = cardElement.querySelector(".popup__image");
-const deleteWindow = cardElement.querySelector(".popup__close");
-const cardLike = document.querySelector(".card__like-button");
-const deleteCard = document.querySelector(".card__delete-button");
+import {
+  cardElement,
+  modalImage,
+  closeCardFormbutton,
+  cardLike,
+  deleteCard,
+} from "./utils.js";
 
 export default class Card {
-  constructor(data, templateSelector) {
+  constructor(data, templateSelector, handleCardClick) {
     this._name = data.name;
     this._link = data.link;
     this._templateSelector = templateSelector;
+    this._handleCardClick = handleCardClick;
   }
   _getTemplate() {
     const generationCards = document
@@ -28,14 +31,6 @@ export default class Card {
     return this._element;
   }
 
-  _handleOpenPopup() {
-    cardsImage.src = this._link;
-    cardElement.classList.add("popup_is-opened");
-  }
-  _handleClosePopup() {
-    cardsImage.src = "";
-    cardElement.classList.remove("popup_is-opened");
-  }
   _like() {
     console.log("this._like");
 
@@ -51,12 +46,9 @@ export default class Card {
     this._element
       .querySelector(".card__image")
       .addEventListener("click", () => {
-        this._handleOpenPopup();
+        console.log(this._handleCardClick);
+        this._handleCardClick(this._name, this._link);
       });
-
-    deleteWindow.addEventListener("click", () => {
-      this._handleClosePopup();
-    });
 
     this._element
       .querySelector(".card__like-button")

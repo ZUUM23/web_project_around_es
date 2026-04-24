@@ -9,14 +9,12 @@ export default class FormValidator {
     // this._errorClass = data.errorClass;
 
     this._formElement = formElement;
-    console.log("data");
   }
 
   _showInputError(element, errorMessage) {
     const errorElement = this._formElement.querySelector(
       `.${element.id}-input-error`,
     );
-    console.log(errorElement);
 
     element.classList.add(this._errorMessage);
     errorElement.textContent = errorMessage;
@@ -27,7 +25,6 @@ export default class FormValidator {
     const errorElement = this._formElement.querySelector(
       `.${element.id}-input-error`,
     );
-    console.log(`#${element.id}-input-error`);
 
     element.classList.remove(this._errorMessage);
     errorElement.textContent = "";
@@ -62,8 +59,6 @@ export default class FormValidator {
     this._inputList = Array.from(
       this._formElement.querySelectorAll(this._inputSelector),
     );
-    console.log(this._formElement);
-    console.log(this._inputSelector);
 
     this._buttonElement = this._formElement.querySelector(
       this._submitButtonSelector,
@@ -85,6 +80,5 @@ export default class FormValidator {
     });
 
     this._setEventListeners();
-    console.log("lola");
   }
 }
