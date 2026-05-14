@@ -8,34 +8,35 @@ import {
 } from "./utils.js";
 
 export default class Popup {
-  constructor(selectorPopup) {
-    this._Popup = document.querySelector(selectorPopup);
+  constructor(selectorPopup, form) {
+    this._form = form;
+    this._popup = document.querySelector(selectorPopup);
     this._handleEscClose = this._handleEscClose.bind(this);
   }
   openModal() {
-    this._Popup.classList.add(`popup_is-opened`);
+    this._popup.classList.add(`popup_is-opened`);
     document.addEventListener("keydown", this._handleEscClose);
   }
-  closemodal() {
-    this._Popup.classList.remove(`popup_is-opened`);
+  closeModal() {
+    this._popup.classList.remove(`popup_is-opened`);
     document.removeEventListener("keydown", this._handleEscClose);
   }
   _handleEscClose(evt) {
     if (evt.key === `Escape`) {
-      this.closemodal();
+      this.closeModal();
     }
   }
   setEventListeners() {
     this._popup.addEventListener("click", (evt) => {
       if (
-        evt.target.classList("popup_is-opened") ||
-        evt.target.classList("popup__close")
+        evt.target.classList.contains("popup_is-opened") ||
+        evt.target.classList.contains("popup__close")
       ) {
-        this.closemodal();
+        this.closeModal();
       }
-      this._popup.addEventListener("keyup", () => {
-        _handleEscClose();
-      });
+      // this._popup.addEventListener("click", () => {
+      //   this._handleEscClose();
+      // });
     });
   }
 }

@@ -2,6 +2,7 @@ export const profileTitle = document.querySelector(".profile__title");
 export const profileDescription = document.querySelector(
   ".profile__description",
 );
+export const profileImage = document.querySelector(".profile__image");
 export const initialName = document.querySelector(".popup__input_type_name");
 export const descriction = document.querySelector(
   ".popup__input_type_description",
@@ -15,6 +16,7 @@ export const template = document
 export const openCardButtonEdit = document.querySelector(
   ".profile__edit-button",
 );
+// export const profileImage = document.querySelector(".profile__image");
 export const divCard = document.querySelector(".popup");
 export const openCardButton = document.querySelector("#edit-popup");
 export const imagemodal = document.querySelector("#image-modal");

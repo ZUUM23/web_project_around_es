@@ -9,8 +9,8 @@ export default class UserInfo {
       workUser: this._workUser.textContent,
     };
   }
-  setUserInfo({ name, workUser }) {
-    this._usuario.textContent = name;
-    this._workUser.textContent = workUser;
+  setUserInfo(item) {
+    this._usuario.textContent = item.name;
+    this._workUser.textContent = item.workUser;
   }
 }
