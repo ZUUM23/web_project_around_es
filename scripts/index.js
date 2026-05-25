@@ -67,7 +67,7 @@ const api = new Api({
 const handleLikeClick = (cardId, isLiked, card) => {
   console.log("mundo");
 
-  if (isLiked === false) {
+  if (!isLiked === false) {
     api.removeLike(cardId, isLiked).then((res) => {
       console.log("false");
       card.handleLikeCarsdactive(false);
