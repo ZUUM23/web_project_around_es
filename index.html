@@ -18,7 +18,20 @@
       </header>
       <main class="content">
         <section class="profile page__section">
-          <img class="profile__image" src="./images/avatar.jpg" alt="Avatar" />
+          <div class="profile__avatar">
+            <img
+              class="profile__image"
+              src="./images/avatar.jpg"
+              alt="Avatar"
+            />
+            <button class="profile__imagen-edit">
+              <img
+                class="profile__lapiz"
+                src="./images/edit-icon.svg"
+                alt="editar"
+              />
+            </button>
+          </div>
           <div class="profile__info">
             <h1 class="profile__title">Jacques Cousteau</h1>
             <button
@@ -55,7 +68,7 @@
         <div class="popup__content">
           <button
             aria-label="Cerrar ventana emergente"
-            class="popup__close-button"
+            class="popup__close"
             type="button"
           ></button>
           <h3 class="popup__title">Editar perfil</h3>
@@ -154,6 +167,42 @@
           ></button>
           <img alt="" class="popup__image" src="#" />
           <p class="popup__caption"></p>
+        </div>
+      </div>
+      <div class="popup" id="confirmation__delete">
+        <div class="popup__container">
+          <button
+            aria-label="Cerrar ventana emergente"
+            class="popup__close"
+            type="button"
+          ></button>
+          <h2 class="popup__comprobation">¿estas seguro?</h2>
+          <button class="popup__buttom-delete" type="submit">si</button>
+        </div>
+      </div>
+      <div class="popup" id="cambiar_foto">
+        <div class="popup__contenido">
+          <button
+            aria-label="Cerrar ventana emergente"
+            class="popup__close"
+            type="button"
+          ></button>
+          <h2 class="popup__comprobation-avatar">Cambiar foto de perfil</h2>
+          <form class="popup__form">
+            <input
+              type="url"
+              class="popup__input popup__input_type_card-name"
+              minlength="2"
+              maxlength="200"
+              required
+              name="avatar"
+              placeholder="URL"
+            />
+            <span class="place-name-input-error popup__input-error"
+              >completa este campo</span
+            >
+            <button class="popup__buttom-avatar" type="submit">Guardar</button>
+          </form>
         </div>
       </div>
     </div>

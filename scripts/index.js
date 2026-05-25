@@ -5,7 +5,8 @@ import FormValidator from "./FormValidator.js";
 import UserInfo from "./UserInfo.js";
 import PopupWithForm from "./PopupWithForm.js";
 import PopupWithImage from "./PopupWithImage.js";
-
+import Api from "./Api.js";
+import PopupWithConfirmation from "./PopupWithConfirmation.js";
 export const profileForm = document.querySelector(".popup__form");
 import {
   container,
@@ -13,13 +14,16 @@ import {
   openCardButton,
   popupCaption,
   form,
+  changePhoto,
   newtarge,
   profileImage,
   imageClose,
   cardElement,
   divCard,
   imagemodal,
+  deleteCard,
   modalImage,
+  cambiarFoto,
   validProfile,
   profileTitle,
   profileDescription,
@@ -33,37 +37,7 @@ import {
   profile,
 } from "./utils.js";
 
-// const initialCards = [
-//   {
-//     name: "Valle de Yosemite",
-//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
-//   },
-//   {
-//     name: "Lago Louise",
-//     link: " https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg",
-//   },
-//   {
-//     name: " Montañas Calvas",
-//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_bald-mountains.jpg",
-//   },
-//   {
-//     name: "Latemar",
-//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_latemar.jpg",
-//   },
-//   {
-//     name: "Parque Nacional de la Vanoise",
-//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_vanoise.jpg",
-//   },
-//   {
-//     name: " Lago di Braies",
-//     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lago.jpg",
-//   },
-//   {
-//     name: " Lago de alaska",
-//     link: "https://images.unsplash.com/photo-1694537820343-d7c364b18593?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bGFnbyUyMGFsYXNrYXxlbnwwfHwwfHx8MA%3D%3D",
-//   },
-// ];
-console.log("res");
+console.log("hola mnndo");
 const template = document
   .querySelector("#template")
   .content.querySelector(".card");
@@ -74,59 +48,68 @@ const data = {
   inputErrorClass: "popupinput_type_error",
   errorClass: "popuperror_visible",
 };
+const userInfo2 = new UserInfo({
+  nameSelector: `.profile__title`,
+  workSelector: `.profile__description`,
+  avatarSelector: `.profile__image`,
+});
+const handleCardClick = (name, link) => {
+  image.openModal(name, link);
+};
 
-//espacio
-
-fetch("https://around-api.es.tripleten-services.com/v1/users/me", {
-  method: "GET",
+const api = new Api({
+  baseUrl: "https://around-api.es.tripleten-services.com/v1",
   headers: {
     authorization: "b5941826-d91b-40a9-a09f-703968f12f07",
     "Content-Type": "application/json",
   },
-})
-  .then((result) => {
-    if (result.ok) {
-      return result.json();
-    }
-    return Promise.reject(`Error: ${result.status}`);
-  })
-  .then((dataUser) => {
-    console.log("datos de usuario ", dataUser);
-    profileTitle.textContent = dataUser.name;
-    profileDescription.textContent = dataUser.about;
-    profileImage.src = dataUser.avatar;
-  })
-  .catch((error) => {
-    console.log("error", error);
-  });
+});
+const handleLikeClick = (cardId, isLiked, card) => {
+  console.log("mundo");
 
-fetch("https://around-api.es.tripleten-services.com/v1/cards", {
-  // method: "GET",
-  headers: {
-    authorization: "b5941826-d91b-40a9-a09f-703968f12f07",
-  },
-})
-  .then((resultado) => {
-    if (resultado.ok) {
-      return resultado.json();
-    }
-    return Promise.reject(`err: ${resultado.status}`);
-  })
-  .then((cardNewApi) => {
-    console.log(cardNewApi[0]);
-    const cardOfSection = new Section(
-      {
-        items: cardNewApi,
-        renderer: renderCard,
-      },
-      `.cards__list`,
-    );
-    cardOfSection.containerItem();
-  })
-  .catch((err) => {
-    console.log(`no pusistes bien la nueva tarjeta:`, err);
-    return err;
+  if (isLiked === false) {
+    api.removeLike(cardId, isLiked).then((res) => {
+      console.log("false");
+      card.handleLikeCarsdactive(false);
+    });
+  } else {
+    api.likeCardApi(cardId, isLiked).then((res) => {
+      console.log("tru");
+      card.handleLikeCarsdactive(true);
+    });
+  }
+};
+const deleteCards = (cardId, CardElement) => {
+  confirmationOfDelete._setAction(() => {
+    api.deleteCardsApi(cardId).then(() => {
+      CardElement.remove();
+      confirmationOfDelete.closeModal();
+    });
   });
+  confirmationOfDelete.openModal();
+};
+let cardSection;
+api.getInitialCards().then((res) => {
+  cardSection = new Section(`.cards__list`, {
+    items: res,
+    renderer: (item) => {
+      const initialCard = new Card(
+        item,
+        "#template",
+        handleCardClick,
+        deleteCards,
+        handleLikeClick,
+      );
+      return initialCard.cardgeneration();
+    },
+  });
+  console.log("datos de tarjeta", res);
+  cardSection.containerItem();
+});
+
+api.getUserInfo().then((userData) => {
+  console.log("Datos del usuario:", userData);
+});
 
 //espacio
 openCardButtonEdit.addEventListener("click", () => {
@@ -136,9 +119,8 @@ openCardButtonEdit.addEventListener("click", () => {
     '#edit-popup input[name="description"]',
   );
   nameInput.value = profileEditUser.name;
-  console.log("Datos obtenidos:", profileEditUser);
   workInput.value = profileEditUser.workUser;
-  editProfilePopup.openModal(openCardButton);
+  profilePopup.openModal(openCardButton);
 });
 
 openCardFormButton.addEventListener("click", () => {
@@ -149,52 +131,81 @@ openCardFormButton.addEventListener("click", () => {
 imageClose.addEventListener("click", () => {
   image.closeModal(imagemodal);
 });
-
-const handleCardClick = (name, link) => {
-  image.openModal(name, link);
-};
-const renderCard = (data, container) => {
-  const card = new Card(data, "#template", handleCardClick);
-  const cardNew = card._cardgeneration();
-  document.querySelector(".cards__list").prepend(cardNew);
-  console.log(cardNew);
-  return cardNew;
-};
-
-// const nuevSection = new Section(
-//   { items: initialCards, renderer: renderCard },
-//   ".cards__list",
-// );
-// const popupEj = new Popup("#edit-popup");
-// const popupEjemplo = new Popup("#new-card-popup");
 const addNewCardPage = new PopupWithForm("#new-card-popup", (formData) => {
-  const newCar = renderCard({
-    name: formData["place-name"],
-    link: formData["link"],
-  });
+  addNewCardPage.buttomLoading(true);
+  api
+    .addSendLetter({
+      name: formData["place-name"],
+      link: formData["link"],
+    })
+    .then((item) => {
+      const newCard = new Card(
+        item,
+        "#template",
+        handleCardClick,
+        deleteCards,
+        handleLikeClick,
+      );
+      cardSection.addItem(newCard.cardgeneration());
+      addNewCardPage.closeModal();
+    })
+    .finally(() => {
+      addNewCardPage.buttomLoading(false);
+    });
+});
+const profilePopup = new PopupWithForm("#edit-popup", (data) => {
+  profilePopup.buttomLoading(true);
+  api
+    .profileUpdateUser({
+      name: data["name"],
+      about: data["description"],
+    })
+    .then((userData) => {
+      userInfo2.setUserInfo(
+        { name: data.name, workUser: data.description },
+        userData,
+      );
+    });
+  api
+    .profileUpdateUser({ name: data["name"], about: data["description"] })
+    .finally(() => {
+      profilePopup.buttomLoading(false);
+    });
+  profilePopup.closeModal();
+});
 
-  addNewCardPage.closeModal();
+changePhoto.addEventListener("click", () => {
+  addFhotoProfile.openModal(cambiarFoto);
 });
-const editProfilePopup = new PopupWithForm("#edit-popup", (data) => {
-  console.log("se esta ejecutando");
-  userInfo2.setUserInfo({
-    name: data.name,
-    workUser: data.description,
-  });
-  editProfilePopup.closeModal();
-});
+
+const addFhotoProfile = new PopupWithForm(
+  "#cambiar_foto",
+
+  (datos) => {
+    addFhotoProfile.buttomLoading(true);
+    api
+      .updateProfilePicture({ avatar: datos["avatar"] })
+      .then((userData) => {
+        profileImage.src = userData.avatar;
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        addFhotoProfile.buttomLoading(true);
+      });
+    addFhotoProfile.closeModal();
+  },
+);
+const confirmationOfDelete = new PopupWithConfirmation("#confirmation__delete");
+
 const image = new PopupWithImage("#image-modal", modalImage, popupCaption);
-// initialCards.forEach((card) => {
-//   renderCard(card, container);
-// });
-const userInfo2 = new UserInfo({
-  nameSelector: `.profile__title`,
-  workSelector: `.profile__description`,
-});
+
 const profileFormValidator = new FormValidator(data, profileForm);
 const cardFormValidator = new FormValidator(data, addCardsForm);
-editProfilePopup.setEventListeners();
 addNewCardPage.setEventListeners();
+confirmationOfDelete.setEventListeners();
+profilePopup.setEventListeners();
+
+addFhotoProfile.setEventListeners();
 image.setEventListeners();
 profileFormValidator.enableValidation();
 cardFormValidator.enableValidation();

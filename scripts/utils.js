@@ -45,3 +45,5 @@ export const cardLike = document.querySelector(".card__like-button");
 export const deleteCard = document.querySelector(".card__delete-button");
 export const popupCaption = document.querySelector(".popup__caption");
 export const imageClose = imagemodal.querySelector(".popup__close");
+export const changePhoto = document.querySelector(".profile__imagen-edit");
+export const cambiarFoto = document.querySelector("#cambiar_foto");
